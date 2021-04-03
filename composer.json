@@ -1,4 +1,7 @@
 
-{
-    "version": "2.0.0"
+  {
+    "name": "my-vendor/hello-world",
+    "require": {
+        "my-vendor/hello-world": "*"
+    }
 }
