@@ -1,7 +1,5 @@
-
-  {
-    "name": "my-vendor/hello-world",
+{
     "require": {
-        "my-vendor/hello-world": "*"
+        "sendgrid/sendgrid": "^7.9"
     }
 }
