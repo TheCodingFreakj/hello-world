@@ -30,7 +30,7 @@ jobs:
          default: ~/hello-world
          type: string
        cache-files-dir:
-         default: ~/.composer/cache/files
+         default: ~/.composer/caches
          description: >-
            Absolute path to the file cache folder. This should be inline with
            "composer global config cache-files-dir --absolute".
