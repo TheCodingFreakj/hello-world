@@ -17,7 +17,7 @@ jobs:
        install-dir:
         default: /usr/local/bin
         description: >
-            By default, composer will be installed at "/usr/local/  bin/      composer", use
+            By default, composer will be installed at "/usr/local/bin/      composer", use
             this to override the install directory.
         type: string
        install-version:
@@ -30,7 +30,7 @@ jobs:
          default: ~/hello-world
          type: string
        cache-files-dir:
-         default: /home/circleci/.composer/cache/files
+         default: /home/circleci/tree/.composer/cache/files
          description: >-
            Absolute path to the file cache folder. This should be inline with
            "composer global config cache-files-dir --absolute".
