@@ -1,0 +1,120 @@
+# PHP CircleCI 2.0 configuration file
+
+# Define the jobs we want to run for this project
+orbs:
+  php: circleci/php@1.1.0
+version: 2.1
+jobs:
+  build: # This is our first job.
+    docker: # it uses the docker executor
+      - image: 'cimg/php:7.4'
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    # Steps are a list of commands to run inside the docker container above.
+ 
+    parameters:
+       install-dir:
+        default: /usr/local/bin
+        description: >
+            By default, composer will be installed at "/usr/local/  bin/      composer", use
+            this to override the install directory.
+        type: string
+       install-version:
+        default: '2.0.12'
+        description: >
+           By default, composer will install the latest composer version, use this to
+           override the installed version.
+        type: string
+       app-dir:
+         default: ~/hello-world
+         type: string
+       cache-files-dir:
+         default: /home/circleci/.composer/cache/files
+         description: >-
+           Absolute path to the file cache folder. This should be inline with
+           "composer global config cache-files-dir --absolute".
+         type: string
+       cache-key:
+         default: composer.json
+         description: >-
+             If this file is updated a new cache bucket will be  created. Recommended to
+             use composer.lock. Use composer.json when composer.lock is absent.
+         type: string
+       cache-version:
+        default: v1
+        description: >-
+              Change the default cache version if you need to clear the cache for any
+              reason.
+        type: string
+       install-flags:
+         default: '--no-interaction --prefer-dist'
+         description: >
+             By default, packages will be installed with "composer 
+             --no-interaction --prefer-dist", use this to override    
+         type: string
+       vendor-dir:
+         default: vendor
+         type: string
+       with-cache:
+         default: true
+         description: Enable automatic caching of your dependencies for increased speed.
+         type: boolean
+
+    steps:
+      - run:
+         command: > 
+           curl -sS https://getcomposer.org/installer -o composer-setup.php
+
+           sudo php composer-setup.php --filename=composer
+           --install-dir=<<parameters.install-dir>>
+           <<#parameters.install-version>>--version=<<parameters.install-version>><</parameters.install-version>>
+      - when:
+          condition: <<parameters.with-cache >>
+          steps:
+             restore_cache:
+                keys:
+                  - >-
+                     composer-deps-<<parameters.cache-version>>-{{ checksum
+                      "<<parameters.app-dir>>/<<parameters.cache-key>>" }}
+                     - run:
+                          command:|
+                              if [ ! -f "composer.json" ] && [ ! -f "composer.lock" ]; then
+                                 echo
+                                 echo "---"
+                                 echo "Unable to find your composer.json and composer.lock files. Did you forget to set the app-dir parameter?"
+                                 echo "---"
+                                 echo
+                                 echo "Current directory:$(pwd)"
+                                 echo
+                                 echo
+                                 echo "List directory:"
+                                 echo
+                                 ls
+                                 exit 1
+                              fi
+                         name: Verify composer.json and/or composer.lock exist
+                         working_directory: <<parameters.app-dir>>
+
+                     -run:
+                        command: composer install <<parameters.install-flags>>
+                        name: Installing Composer Packages
+                        working_directory: <<parameters.app-dir>>
+
+                       -when:
+                        condition: <<parameters.with-cache >>
+                        steps:
+                          save_cache:
+                               key: >- 
+                                  composer-deps-<<parameters.cache-version>>-{{checksum
+                                 "<<parameters.app-dir>>/<<parameters.cache-key>>"}}
+                               paths:
+                                  - <<parameters.app-dir>>/<<parameters.vendor-dir>>
+                                  - <<parameters.cache-files-dir>>
+   
+    
+# Orchestrate our job run sequence
+workflows:
+  build_and_test:
+    jobs:
+      - build
