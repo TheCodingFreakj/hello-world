@@ -64,7 +64,7 @@ jobs:
       - run:
          command: > 
            curl -sS https://getcomposer.org/installer -o composer-setup.php
-           sudo php composer-setup.php --filename=composer
+           sudo php composer-setup.php --filename=composer.phar
            --install-dir=<<parameters.install-dir>>
            <<#parameters.install-version>>--version=<<parameters.install-version>><</parameters.install-version>>
       - when:
