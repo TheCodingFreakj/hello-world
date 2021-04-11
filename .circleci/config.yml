@@ -14,7 +14,7 @@ jobs:
     # Steps are a list of commands to run inside the docker container above.
     parameters:
        install-dir:
-        default: /usr/local/bin
+        default: /usr/local/bin/circleci
         description: >
             By default, composer will be installed at "/usr/local/bin/composer", use
             this to override the install directory.
