@@ -14,9 +14,9 @@ jobs:
     # Steps are a list of commands to run inside the docker container above.
     parameters:
        install-dir:
-        default: /usr/local/bin/composer
+        default: /usr/local/bin
         description: >
-            By default, composer will be installed at "/usr/local/bin/ composer", use
+            By default, composer will be installed at "/usr/local/bin/composer", use
             this to override the install directory.
         type: string
        install-version:
@@ -68,9 +68,7 @@ jobs:
            php composer-setup.php
            --install-dir=<<parameters.install-dir>>
            <<#parameters.install-version>>--version=<<parameters.install-version>><</parameters.install-version>>
-           php -r "unlink('composer-setup.php');"
-           
-           
+           php -r "unlink('composer-setup.php');"      
       - when:
           condition: <<parameters.with-cache>>
           steps:
@@ -78,7 +76,7 @@ jobs:
                 keys:
                   - >-
                      composer-deps-<<parameters.cache-version>>-{{ checksum
-                      "<<parameters.app-dir>>/<<parameters.vendor-dir>>/<<parameters.cache-key>>" }}
+                      "<<parameters.app-dir>>/<<parameters.cache-key>>" }}
                      - run:
                           command:|
                               if [ ! -f "composer.json" ] && [ ! -f "composer.lock" ]; then
