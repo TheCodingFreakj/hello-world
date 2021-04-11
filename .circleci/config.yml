@@ -75,15 +75,9 @@ jobs:
              restore_cache:
                 keys:
                   - >-
-
-                  
-                    # Find a cache corresponding to this specific package-lock.json checksum
-                    # when this file is changed, this key will fail
                     - composer-deps--{{ arch }}-{{ .Branch }}-{{ checksum "composer.lock" }}
-                    # Find the most recently generated cache used from any branch
                     - composer-deps-
-                    #  composer-deps-<<parameters.cache-version>>-{{ checksum
-                    #   "<<parameters.app-dir>>/<<parameters.cache-key>>" }}
+                    
                      - run:
                           command:|
                               if [ ! -f "composer.json" ] && [ ! -f "composer.lock" ]; then
@@ -117,11 +111,7 @@ jobs:
                               - composer-deps--{{ arch }}-{{ .Branch }}-{{ checksum "composer.lock" }}
                               paths:
                               - vendor/composer
-                              #     composer-deps-<<parameters.cache-version>>-{{checksum
-                              #    "<<parameters.app-dir>>/<<parameters.cache-key>>"}}
-                              #  paths:
-                              #     - <<parameters.app-dir>>/<<parameters.vendor-dir>>
-                              #     - <<parameters.cache-files-dir>>
+                          
    
     
 # Orchestrate our job run sequence
