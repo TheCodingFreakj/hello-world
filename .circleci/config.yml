@@ -29,7 +29,7 @@ jobs:
          default: ~/hello-world
          type: string
        cache-files-dir:
-         default: /home/circleci/.composer/cache/files
+         default: ~/.composer/cache
          description: >-
            Absolute path to the file cache folder. This should be inline with
            "composer global config cache-files-dir --absolute".
