@@ -26,7 +26,7 @@ jobs:
            override the installed version.
         type: string
        app-dir:
-         default: ~/hello-world
+         default:  ~/project
          type: string
        cache-files-dir:
          default: /home/circleci/.composer/cache/files
